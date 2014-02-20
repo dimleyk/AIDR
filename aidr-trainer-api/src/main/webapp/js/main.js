@@ -1,6 +1,6 @@
 // The root URL for the RESTful services
 
-var rootURL = "/AIDRCrowdsourcingAPI/rest/template/JSONP/crisis/code/";
+var rootURL = "/AIDRTrainerAPI/rest/template/JSONP/crisis/code/";
 var desc = "<b>Hi!</b>&nbsp;&nbsp;Thanks a lot for helping us in classifying the tweets collected on " ;
 // Retrieve wine list when application starts
 findByID();
@@ -94,12 +94,12 @@ function setPybossaCookie(cookieName){
 
         $.cookie(cookieName, 'seen', {
             path    : '/',
-            domain  : 'http://pybossa.qcri.org/'
+            domain  : 'http://clickers.micromappers.org/'
         });
 
         $.cookie(tutorialCookie, 'seen', {
             path    : '/',
-            domain  : 'http://pybossa.qcri.org/'
+            domain  : 'http://clickers.micromappers.org/'
         });
 
         $.cookie(cookieName, 'seen', {
