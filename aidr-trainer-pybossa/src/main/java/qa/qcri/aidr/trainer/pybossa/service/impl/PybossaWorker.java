@@ -16,6 +16,7 @@ import qa.qcri.aidr.trainer.pybossa.service.*;
 import qa.qcri.aidr.trainer.pybossa.store.StatusCodeType;
 import qa.qcri.aidr.trainer.pybossa.store.URLPrefixCode;
 import qa.qcri.aidr.trainer.pybossa.store.UserAccount;
+import qa.qcri.aidr.trainer.pybossa.util.DataFormatValidator;
 import qa.qcri.aidr.trainer.pybossa.util.DateTimeConverter;
 
 import java.text.SimpleDateFormat;
@@ -118,7 +119,7 @@ public class PybossaWorker implements ClientAppRunWorker {
                     if( pushTaskNumber > 0 ){
 
                         String inputData = pybossaCommunicator.sendGet(AIDR_API_URL + id + "/" +pushTaskNumber);
-                        if(inputData.trim().length() > 5){
+                        if(DataFormatValidator.isValidateJson(inputData)){
                             try {
                                 for (int index = 0; index < appList.size() ; index++){
                                     ClientApp currentClientApp = appList.get(index);
@@ -183,7 +184,7 @@ public class PybossaWorker implements ClientAppRunWorker {
         String PYBOSSA_API_TASK_RUN = PYBOSSA_API_TASK_RUN_BASE_URL + clientApp.getPlatformAppID() + "&task_id=" + taskID;
         String importResult = pybossaCommunicator.sendGet(PYBOSSA_API_TASK_RUN) ;
 
-        if(!importResult.isEmpty() && importResult.length() > StatusCodeType.RESPONSE_MIN_LENGTH ){
+        if(DataFormatValidator.isValidateJson(importResult)){
             List<TaskLog> taskLogList = taskLogService.getTaskLog(taskQueue.getTaskQueueID());
             String pybossaResult = pybossaFormatter.getTaskLogDateHistory(taskLogList,importResult, parser);
             int responseCode = pybossaCommunicator.sendPost(pybossaResult, AIDR_TASK_ANSWER_URL);
@@ -197,7 +198,7 @@ public class PybossaWorker implements ClientAppRunWorker {
 
     private void addToTaskQueue(String inputData, Long clientAppID, Integer status){
 
-        System.out.println("addToTaskQueue is called");
+        //System.out.println("addToTaskQueue is called");
 
         try {
                 Object obj = parser.parse(inputData);

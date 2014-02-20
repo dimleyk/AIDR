@@ -107,7 +107,9 @@ public class PybossaCommunicator extends AbstractCommunicator {
 
 
         }catch (Exception ex) {
-            System.out.println("ex Code sendPost: " + ex);
+            System.out.println("ex Code sendPost1: " + ex);
+            System.out.println("ex Code sendPost2: " + data);
+            System.out.println("ex Code sendPost3: " + url);
         } finally {
             httpClient.getConnectionManager().shutdown();
         }
