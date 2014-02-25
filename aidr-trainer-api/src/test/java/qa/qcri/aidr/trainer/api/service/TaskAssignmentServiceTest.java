@@ -31,5 +31,6 @@ public class TaskAssignmentServiceTest {
       //  String userName = "Pybossa";
 
       //  taskAssignmentService.revertTaskAssignment(documentID,userName );
+      //  taskAssignmentService.processTaskAssignmentCleanUp();
     }
 }

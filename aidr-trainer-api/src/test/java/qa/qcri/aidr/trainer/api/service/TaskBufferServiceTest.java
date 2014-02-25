@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import qa.qcri.aidr.trainer.api.entity.TaskBuffer;
 import qa.qcri.aidr.trainer.api.template.TaskBufferJsonModel;
 
 import java.util.List;
@@ -26,8 +27,8 @@ public class TaskBufferServiceTest {
 
     @Test
     public void testFindAllTaskBuffer() throws Exception {
-       // List<TaskBufferJsonModel> taskBuffers = taskBufferService.findOneTaskBufferByCririsID(new Long(14),"Pybossa", 0, 1) ;
-       // System.out.println("taskBuffers : " + taskBuffers.size());
+     //   List<TaskBuffer> taskBuffers = taskBufferService.findAllTaskBufferByCririsID(new Long(42),"Pybossa", 0, 3) ;
+      //  System.out.println("taskBuffers : " + taskBuffers.size());
       //  taskAssignmentService.revertTaskAssignment(new Long(367577), "pybossa");
 
       //  for(int i = 0; i < taskBuffers.size(); i++){
