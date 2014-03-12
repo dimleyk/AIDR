@@ -24,7 +24,6 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -69,10 +68,10 @@ public class TaskBufferScanner {
 		executorService = Executors.newCachedThreadPool();
 		boolean isSuccess = startTaskBufferScannerThread(configData.TASK_EXPIRY_AGE_LIMIT, configData.TASK_BUFFER_SCAN_INTERVAL);
 		if (isSuccess) {
-			logger.info("[TaskBufferScanner] Context Initialized - started task buffer scanner thread.");
+			System.out.println("[TaskBufferScanner] Context Initialized - started task buffer scanner thread.");
 		}
 		else {
-			logger.error("[TaskBufferScanner] Fatal error - could not start task buffer scanner thread!");
+			System.err.println("[TaskBufferScanner] Fatal error - could not start task buffer scanner thread!");
 		}	
 	}
 
@@ -99,8 +98,8 @@ public class TaskBufferScanner {
 							try {
 								// Hibernate code to delete stale tasks from Document entity/table goes here
 								final long TASK_SCAN_INTERVAL = taskBufferScannerEJB.parseTime(taskScanInterval);
-								//threadStatus = true;
-								//taskBufferScannerEJB.ScanTaskBuffer(taskMaxAge, taskScanInterval);
+								threadStatus = true;
+								taskBufferScannerEJB.ScanTaskBuffer(taskMaxAge, taskScanInterval);
 							
 								Thread.sleep(TASK_SCAN_INTERVAL);
 							} catch (InterruptedException e) {} 

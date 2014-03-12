@@ -23,7 +23,7 @@ import qa.qcri.aidr.predictui.facade.TaskBufferScannerFacade;
 public class TaskBufferScannerImp implements TaskBufferScannerFacade {
 
 	private static Logger logger = LoggerFactory.getLogger(TaskBufferScannerImp.class);
-	
+
 	@PersistenceContext(unitName = "qa.qcri.aidr.predictui-EJBS")
 	private EntityManager em;
 
@@ -31,40 +31,41 @@ public class TaskBufferScannerImp implements TaskBufferScannerFacade {
 	public void ScanTaskBuffer(final String maxTaskAge, final String scanInterval) {
 		// TODO Auto-generated method stub
 		try {
-			String deleteStaleDocsSql = "DELETE * FROM aidr_predict.document t LEFT JOIN "
+			String deleteStaleDocsSql = "DELETE t FROM aidr_predict.document t LEFT JOIN "
 					+ "aidr_predict.task_assignment b ON t.documentID = b.documentID WHERE "
 					+ "(b.documentID IS NULL && TIMESTAMPDIFF(" 
 					+ getMetric(scanInterval) + ", t.receivedAt, now()) > :task_expiry_age);";
-			
-				Query querySelect = em.createNativeQuery(deleteStaleDocsSql);
-				querySelect.setParameter("task_expiry_age", Integer.parseInt(getTimeValue(maxTaskAge)));
-				
-				// no need - Hibernate automatically acquires LockModeType.WRITE lock
-				// Also, test showed that the problem is still coming from trainer-api
-				//querySelect.setLockMode(LockModeType.PESSIMISTIC_FORCE_INCREMENT);		
-				int result = querySelect.executeUpdate();
-				logger.info("[ScanTaskBuffer] number of deleted records = " + result);
+
+			Query querySelect1 = em.createNativeQuery(deleteStaleDocsSql);
+			querySelect1.setParameter("task_expiry_age", Integer.parseInt(getTimeValue(maxTaskAge)));
+
+			// no need - Hibernate automatically acquires LockModeType.WRITE lock
+			// Also, test showed that the problem is still coming from trainer-api
+			//querySelect.setLockMode(LockModeType.OPTIMISTIC_FORCE_INCREMENT);		
+			int result = querySelect1.executeUpdate();
+			System.out.println("[ScanTaskBuffer] number of deleted stale records = " + result);
 		} catch (Exception e) {
-			logger.error("[ScanTaskBuffer] Exception in executing SQL query");
+			logger.error("[ScanTaskBuffer] Exception in executing SQL delete stale docs query");
 			e.printStackTrace();
 		}
 		try {
-			String deleteNoAnswerDocsSql = "DELETE * FROM aidr_predict.document d WHERE "
-					+ " (d.documentID IN (SELECT t.documentID from task_assignment t "
-					+ " LEFT JOIN aidr_predict.task_answer s ON t.documentID = s.documentID WHERE " 
-					+ " ((s.documentID IS NULL) && (TIMESTAMPDIFF(" 
-					+ getMetric(scanInterval) + ", t.assignedAt, now()) > :task_expiry_age))));";
+			String deleteNoAnswerDocsSql = "DELETE T from aidr_predict.document T LEFT JOIN "
+					+ "   aidr_predict.task_assignment D ON T.documentID=D.documentID WHERE "
+					+ "   (SELECT S.documentID FROM aidr_predict.task_assignment S WHERE "
+					+ "   ((S.documentID NOT IN (SELECT TA.documentID from aidr_predict.task_answer TA)) "
+					+ "   && (TIMESTAMPDIFF(" 
+					+ getMetric(scanInterval) + ", S.assignedAt, now()) > :task_expiry_age)));";
 			
-				Query querySelect = em.createNativeQuery(deleteNoAnswerDocsSql);
-				querySelect.setParameter("task_expiry_age", Integer.parseInt(getTimeValue(maxTaskAge)));
-				
-				// no need - Hibernate automatically acquires LockModeType.WRITE lock
-				// Also, test showed that the problem is still coming from trainer-api
-				//querySelect.setLockMode(LockModeType.PESSIMISTIC_FORCE_INCREMENT);		
-				int result = querySelect.executeUpdate();
-				logger.info("[ScanTaskBuffer] number of deleted records = " + result);
+			Query querySelect2 = em.createNativeQuery(deleteNoAnswerDocsSql);
+			querySelect2.setParameter("task_expiry_age", Integer.parseInt(getTimeValue(maxTaskAge)));
+
+			// no need - Hibernate automatically acquires LockModeType.WRITE lock
+			// Also, test showed that the problem is still coming from trainer-api
+			//querySelect.setLockMode(LockModeType.OPTIMISTIC_FORCE_INCREMENT);		
+			int result = querySelect2.executeUpdate();
+			System.out.println("[ScanTaskBuffer] number of deleted no answer records = " + result);
 		} catch (Exception e) {
-			logger.error("[ScanTaskBuffer] Exception in executing SQL query");
+			logger.error("[ScanTaskBuffer] Exception in executing SQL delete no answer docs query");
 			e.printStackTrace();
 		}
 	}
