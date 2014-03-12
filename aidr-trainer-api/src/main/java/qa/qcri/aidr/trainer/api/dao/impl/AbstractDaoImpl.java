@@ -42,6 +42,7 @@ public abstract class AbstractDaoImpl<E, I extends Serializable> implements Abst
         Session session = getCurrentSession();
         session.buildLockRequest(LockOptions.UPGRADE);
         getCurrentSession().save(e);
+        
     }
 
     @Override
