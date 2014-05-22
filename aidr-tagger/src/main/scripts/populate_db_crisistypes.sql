@@ -14,6 +14,7 @@ INSERT INTO `crisis_type` (`crisisTypeID`, `name`) values (1190, 'Natural Hazard
 INSERT INTO `crisis_type` (`crisisTypeID`, `name`) values (1200, 'Natural Hazard: Other');
 INSERT INTO `crisis_type` (`crisisTypeID`, `name`) values (1210, 'Human Induced: War or armed conflict, incl. acts of war');
 INSERT INTO `crisis_type` (`crisisTypeID`, `name`) values (1220, 'Human Induced: Terrorist attack against civilians');
+INSERT INTO `crisis_type` (`crisisTypeID`, `name`) values (1220, 'Human Induced: Cyber attack');
 INSERT INTO `crisis_type` (`crisisTypeID`, `name`) values (1230, 'Human Induced: Demonstrations (peaceful or violent, riots)');
 INSERT INTO `crisis_type` (`crisisTypeID`, `name`) values (1240, 'Human Induced: Pollution (hazardous material, oil spill, etc.)');
 INSERT INTO `crisis_type` (`crisisTypeID`, `name`) values (1250, 'Human Induced: Radiation, including nuclear explosion');
